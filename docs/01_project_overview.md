@@ -8,7 +8,7 @@ Point it at music and you'll see the bass frequencies on the left, the highs on 
 
 ## Why build this?
 
-The project was inspired by Phil's Lab's *Silly Scope* YouTube series and built as a deliberate learning exercise alongside Miro Samek's *Modern Embedded Systems Programming* course. The two tracks were interleaved so that theory arrived just before it was needed in code — Samek's lessons on interrupts landed before the ADC/DMA work, his architecture chapters landed before the event-driven refactor.
+The project was inspired by hoff_world *Silly Scope* YouTube series and built as a deliberate learning exercise alongside Miro Samek's *Modern Embedded Systems Programming* course. The two tracks were interleaved so that theory arrived just before it was needed in code — Samek's lessons on interrupts landed before the ADC/DMA work, his architecture chapters landed before the event-driven refactor.
 
 The goal was never just a working device. It was to understand **why** every decision was made — why DMA instead of CPU polling, why a Hanning window, why event-driven instead of a super-loop, why this MCU can only do a 256-point FFT. A device you built without understanding is just a box. A device you can explain is a foundation.
 
