@@ -2,6 +2,8 @@
 Building a small formfactor spectrum analyzer, using an STM NUCLEO-C031C6, and learning tons of concepts while doing so, embedded programming, C, Event-driven Programming, DSP basics, PCB design, Electronics, etc. 
 # jigglescanner
 
+# jigglescanner
+
 A real-time FFT spectrum analyzer built on the STM32C031C6 (NUCLEO-C031C6 dev board).  
 Displays a live 0–4kHz frequency spectrum on a 1.8" ST7735 LCD.  
 Built as a hands-on embedded systems learning project alongside Miro Samek's *Modern Embedded Systems Programming* course.
@@ -88,6 +90,18 @@ Core/Inc/
 └── st7735screen.h
 ```
 
+## Repository Structure
+
+```
+jigglescanner/
+├── README.md
+├── hardware/
+│   └── WiggleScannerSchematic.kicad_sch   ← KiCad schematic (open with KiCad eeschema)
+├── Core/Src/                              ← firmware source files
+├── Core/Inc/                              ← headers
+└── docs/                                  ← documentation
+```
+
 ## Docs
 
 - [Project Overview & Goals](docs/01_project_overview.md)
@@ -96,3 +110,4 @@ Core/Inc/
 - [DSP Pipeline: ADC → FFT → Spectrum](docs/04_dsp_pipeline.md)
 - [Display Driver & SPI DMA](docs/05_display_driver.md)
 - [Lessons Learned & STM32C0 Gotchas](docs/06_lessons_learned.md)
+- [Schematic & Hardware Design](docs/07_schematic.md)
