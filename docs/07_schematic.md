@@ -4,6 +4,7 @@ The `hardware/` folder contains the KiCad schematic for the production PCB desig
 The prototype runs on a NUCLEO-C031C6 dev board — the schematic represents the next step: a standalone PCB with the same MCU, proper analog front-end, and all connectors in one place.
 
 ---
+<img width="4096" height="2896" alt="image" src="https://github.com/user-attachments/assets/9f3b8db6-6a55-465e-a173-f513b32d23e7" />
 
 ## How to Open the Schematic
 
@@ -11,7 +12,6 @@ The prototype runs on a NUCLEO-C031C6 dev board — the schematic represents the
 2. Open `hardware/WiggleScannerSchematic.kicad_sch` in the KiCad Schematic Editor (eeschema)
 
 The schematic uses standard KiCad libraries plus a custom symbol library (`wigglescannerlib`) for the ST7735 LCD module and documentation symbols. If KiCad reports missing symbols on open, point it at the `hardware/wigglescannerlib` folder.
-
 ---
 
 ## Block Diagram
@@ -58,7 +58,7 @@ Debug:
 USB-C chargers use the CC (Configuration Channel) pins to detect what's connected. A charger sees 5.1kΩ pull-downs on both CC pins and knows to supply 5V at up to 900mA. Without these resistors, many USB-C chargers will supply 0V or enter an error state. This is a required part of the USB-C spec for power-only devices.
 
 **Why an LDO instead of running directly from 5V?**  
-The STM32C031 and ST7735 are both 3.3V devices. Running them from 5V would destroy them. The AMS1117-3.3 drops the 5V USB supply to a stable 3.3V regardless of how much current is drawn (up to 1A, far more than this circuit needs).
+The STM32C031 and ST7735 are both 3.3V devices. Running them from 5V would destroy them. The AMS1117-3.3 drops the 5V USB supply to a stable 3.3V regardless of how much current is drawn (up to 1A, far more than this circuit needs).  
 
 ---
 
@@ -72,7 +72,7 @@ The STM32C031 and ST7735 are both 3.3V devices. Running them from 5V would destr
 | C3 | 1µF | VREF+ filtering |
 
 **Why decoupling capacitors on every power pin?**  
-When the MCU's internal logic switches (millions of times per second), it draws brief spikes of current. Without a capacitor nearby, that current spike travels all the way back to the power supply, causing a small voltage droop on the VDD rail. That droop can cause the MCU to malfunction or reset. The 100nF capacitor sits right next to the pin and supplies the spike locally — the power supply never even sees it.
+When the MCU's internal logic switches (millions of times per second), it draws brief spikes of current. Without a capacitor nearby, that current spike travels all the way back to the power supply, causing a small voltage droop on the VDD rail. That droop can cause the MCU to malfunction or reset. The 100nF capacitor sits right next to the pin and supplies the spike locally and cause of this the power supply never even sees it.
 
 The 10µF bulk capacitors handle slower, larger variations. 100nF handles fast glitches, 10µF handles sustained load changes. Both are needed.
 
@@ -112,13 +112,13 @@ Audio jack (AC signal, may go negative)
 Audio signals are AC — they swing above and below zero volts. The STM32 ADC only accepts 0–3.3V. Connecting audio directly would drive the ADC pins negative on negative swings, which can permanently damage the MCU. The 10µF capacitor blocks the DC component and passes only the AC waveform.
 
 **Why the voltage divider (R4/R5)?**  
-After AC coupling, the signal is centered around 0V — it still goes negative. The 100kΩ/100kΩ divider creates a 1.65V DC bias point. With the signal AC-coupled onto this bias, it now swings between approximately 0V and 3.3V instead of going negative.
+After AC coupling, the signal is centered around 0V it still goes negative. The 100kΩ/100kΩ divider creates a 1.65V DC bias point. With the signal AC-coupled onto this bias, it now swings between approximately 0V and 3.3V instead of going negative.
 
 **Why the BAT54S (D5/D6)?**  
-The voltage divider provides the correct bias under normal conditions, but the ADC pins are still vulnerable to overvoltage from large transients (plugging in a loud source, static discharge). The BAT54S is a dual Schottky diode in a single package — one diode clamps to GND (can't go below 0V), the other clamps to +3V3 (can't go above 3.3V). It's a last line of defense before the ADC.
+The voltage divider provides the correct bias under normal conditions, but the ADC pins are still vulnerable to overvoltage from large transients (plugging in a loud source, static discharge). The BAT54S is a dual Schottky diode in a single package, one diode clamps to GND (can't go below 0V), the other clamps to +3V3 (can't go above 3.3V). It's a last line of defense before the ADC.
 
 **Why the MCP6022 op-amp buffer?**  
-The ADC has a non-trivial input impedance — when it samples, it briefly connects an internal capacitor to the pin and charges it. If the source impedance is high, the ADC doesn't charge fully in time and reads the wrong value. The op-amp buffer has very high input impedance (doesn't load the voltage divider) and very low output impedance (can drive the ADC sample capacitor quickly). The MCP6022 is rail-to-rail — its output can swing all the way from 0V to 3.3V, critical since our signal spans that full range.
+The ADC has a non-trivial input impedance so when it samples, it briefly connects an internal capacitor to the pin and charges it. If the source impedance is high, the ADC doesn't charge fully in time and reads the wrong value. The op-amp buffer has very high input impedance (doesn't load the voltage divider) and very low output impedance (can drive the ADC sample capacitor quickly). The MCP6022 is rail-to-rail — its output can swing all the way from 0V to 3.3V, critical since our signal spans that full range.
 
 **Why C0G/NP0 for the anti-aliasing filter caps (C6/C7)?**  
 The anti-aliasing filter needs a predictable, stable capacitance value to set a precise cutoff frequency. X7R and X5R ceramic capacitors change capacitance significantly with DC bias voltage and temperature. C0G (NP0) dielectric is stable across voltage and temperature — the capacitance stays close to the rated value regardless of conditions. For filter components, use C0G.
