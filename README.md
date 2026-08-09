@@ -102,6 +102,13 @@ jigglescanner/
 └── docs/                                  ← documentation
 ```
 
+<img width="2000" height="2000" alt="image" src="https://github.com/user-attachments/assets/daa03705-ee57-4d17-a126-1353fed5e3ef" />
+
+<img width="2000" height="2000" alt="image" src="https://github.com/user-attachments/assets/64392fe1-88ec-4494-b5df-18b453a1b3de" />
+
+
+
+
 ## Docs
 
 - [Project Overview & Goals](docs/01_project_overview.md)
